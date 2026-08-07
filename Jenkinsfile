@@ -3,6 +3,13 @@ pipeline {
     agent any
 
     parameters {
+
+        choice(
+            name: 'ENV',
+            choices: ['QA', 'UAT', 'PROD'],
+            description: 'Select Environment'
+        )
+
         choice(
             name: 'TEST_SUITE',
             choices: ['all', 'smoke', 'regression'],
@@ -21,6 +28,25 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 bat 'venv\\Scripts\\pip install -r requirements.txt'
+            }
+        }
+
+        stage('Set Environment') {
+            steps {
+                script {
+
+                    if (params.ENV == 'QA') {
+                        env.BASE_URL = 'https://jsonplaceholder.typicode.com'
+                    }
+                    else if (params.ENV == 'UAT') {
+                        env.BASE_URL = 'https://jsonplaceholder.typicode.com'
+                    }
+                    else {
+                        env.BASE_URL = 'https://jsonplaceholder.typicode.com'
+                    }
+
+                    echo "Running on ${env.BASE_URL}"
+                }
             }
         }
 
