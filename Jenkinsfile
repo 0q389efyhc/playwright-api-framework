@@ -3,26 +3,21 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
+        stage('Create Venv') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/0q389efyhc/playwright-api-framework.git'
+                bat 'python -m venv venv'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                bat '''
-                C:\\Users\\Admin\\playwright-api-framework\\venv\\Scripts\\pip.exe install -r requirements.txt
-                '''
+                bat 'venv\\Scripts\\pip install -r requirements.txt'
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat '''
-                C:\\Users\\Admin\\playwright-api-framework\\venv\\Scripts\\python.exe -m pytest -v --html=reports/report.html --self-contained-html
-                '''
+                bat 'venv\\Scripts\\python -m pytest -v --html=reports/report.html --self-contained-html'
             }
         }
     }
