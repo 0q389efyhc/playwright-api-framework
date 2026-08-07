@@ -1,5 +1,10 @@
+import pytest
+
+@pytest.mark.regression
 def test_patch_user(api_client):
-    payload = {"name": "Updated User"}
+    payload = {
+        "job": "Automation Engineer"
+    }
 
     response = api_client.patch("/users/1", payload)
 

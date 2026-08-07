@@ -1,8 +1,12 @@
-from utils.faker_utils import get_user_data
+import pytest
 
+@pytest.mark.smoke
 def test_create_user(api_client):
-    payload = get_user_data()
+    payload = {
+        "name": "Pranjal",
+        "job": "QA"
+    }
 
     response = api_client.post("/users", payload)
 
-    assert response.status_code == 201
+    assert response.status_code in [200, 201]

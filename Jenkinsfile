@@ -1,29 +1,59 @@
 pipeline {
+
     agent any
+
+    parameters {
+        choice(
+            name: 'TEST_SUITE',
+            choices: ['all', 'smoke', 'regression'],
+            description: 'Select Test Suite'
+        )
+    }
 
     stages {
 
-       stage('Create Venv') {
-    steps {
-        bat 'C:\\Users\\Admin\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m venv venv'
-    }
-}
+        stage('Create Venv') {
+            steps {
+                bat 'C:\\Users\\Admin\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m venv venv'
+            }
+        }
 
-stage('Install Dependencies') {
-    steps {
-        bat 'venv\\Scripts\\pip install -r requirements.txt'
-    }
-}
+        stage('Install Dependencies') {
+            steps {
+                bat 'venv\\Scripts\\pip install -r requirements.txt'
+            }
+        }
 
-stage('Run Tests') {
-    steps {
-        bat 'venv\\Scripts\\python -m pytest -v --html=reports/report.html --self-contained-html'
-    }
-}
+        stage('Run Tests') {
+            steps {
+
+                script {
+
+                    if (params.TEST_SUITE == 'all') {
+
+                        bat '''
+                        venv\\Scripts\\python -m pytest -v --html=reports/report.html --self-contained-html
+                        '''
+
+                    } else {
+
+                        bat """
+                        venv\\Scripts\\python -m pytest -v -m ${params.TEST_SUITE} --html=reports/report.html --self-contained-html
+                        """
+
+                    }
+
+                }
+
+            }
+        }
+
     }
 
     post {
+
         always {
+
             publishHTML([
                 allowMissing: false,
                 alwaysLinkToLastBuild: true,
@@ -32,6 +62,9 @@ stage('Run Tests') {
                 reportFiles: 'report.html',
                 reportName: 'API Automation Report'
             ])
+
         }
+
     }
+
 }

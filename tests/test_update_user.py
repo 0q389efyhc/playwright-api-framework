@@ -1,7 +1,9 @@
+import pytest
+
+@pytest.mark.regression
 def test_update_user(api_client):
     payload = {
-        "name": "Dennis",
-        "email": "dennis@test.com"
+        "name": "Updated User"
     }
 
     response = api_client.put("/users/1", payload)
