@@ -33,7 +33,6 @@ pipeline {
 
         stage('Set Environment') {
             steps {
-
                 script {
 
                     if (params.ENV == 'QA') {
@@ -53,7 +52,6 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-
                 script {
 
                     if (params.TEST_SUITE == 'all') {
@@ -80,7 +78,7 @@ pipeline {
 
             // Publish HTML Report
             publishHTML([
-                allowMissing: false,
+                allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
                 reportDir: 'reports',
@@ -98,7 +96,7 @@ pipeline {
 
         success {
 
-            // Send SUCCESS email
+            // SUCCESS EMAIL
             emailext(
                 subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
@@ -106,20 +104,12 @@ Hello,
 
 Jenkins API Automation build completed successfully.
 
-================================
-BUILD INFORMATION
-================================
+Job Name     : ${env.JOB_NAME}
+Build Number : #${env.BUILD_NUMBER}
+Status       : SUCCESS
 
-Job Name    : ${env.JOB_NAME}
-Build Number: #${env.BUILD_NUMBER}
-Status      : SUCCESS
-
-Environment : ${params.ENV}
-Test Suite  : ${params.TEST_SUITE}
-
-================================
-REPORTS
-================================
+Environment  : ${params.ENV}
+Test Suite   : ${params.TEST_SUITE}
 
 Jenkins Build:
 ${env.BUILD_URL}
@@ -139,7 +129,7 @@ Jenkins
 
         failure {
 
-            // Send FAILURE email
+            // FAILURE EMAIL
             emailext(
                 subject: "FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
@@ -147,20 +137,12 @@ Hello,
 
 Jenkins API Automation build has FAILED.
 
-================================
-BUILD INFORMATION
-================================
+Job Name     : ${env.JOB_NAME}
+Build Number : #${env.BUILD_NUMBER}
+Status       : FAILURE
 
-Job Name    : ${env.JOB_NAME}
-Build Number: #${env.BUILD_NUMBER}
-Status      : FAILURE
-
-Environment : ${params.ENV}
-Test Suite  : ${params.TEST_SUITE}
-
-================================
-CHECK BUILD
-================================
+Environment  : ${params.ENV}
+Test Suite   : ${params.TEST_SUITE}
 
 Jenkins Build:
 ${env.BUILD_URL}
@@ -172,6 +154,13 @@ Jenkins
 """,
                 to: 'pranjalnanda406@gmail.com'
             )
+        }
+
+        cleanup {
+
+            echo 'Cleaning Jenkins workspace...'
+
+            deleteDir()
         }
     }
 }
