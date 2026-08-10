@@ -163,5 +163,4 @@ Jenkins
             deleteDir()
         }
     }
-    //jt6k[-s]  kokokjo
 }
