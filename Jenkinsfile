@@ -160,7 +160,7 @@ Jenkins
 
             echo 'Cleaning Jenkins workspace...'
 
-            deleteDir()
+            deleteDir()//lll
         }
     }
 }
