@@ -97,7 +97,10 @@ pipeline {
         success {
 
             // SUCCESS EMAIL
-            emailext(
+            mail(
+                to: 'pranjalnanda406@gmail.com',
+                from: 'pranjalnanda406@gmail.com',
+                replyTo: 'pranjalnanda406@gmail.com',
                 subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
 Hello,
@@ -122,18 +125,17 @@ ${env.BUILD_URL}allure/
 
 Regards,
 Jenkins
-""",
-                to: 'pranjalnanda406@gmail.com',
-                from: 'pranjalnanda406@gmail.com',
-                replyTo: 'pranjalnanda406@gmail.com',
-                mimeType: 'text/plain'
+"""
             )
         }
 
         failure {
 
             // FAILURE EMAIL
-            emailext(
+            mail(
+                to: 'pranjalnanda406@gmail.com',
+                from: 'pranjalnanda406@gmail.com',
+                replyTo: 'pranjalnanda406@gmail.com',
                 subject: "FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
 Hello,
@@ -154,11 +156,7 @@ Please check the Jenkins Console Output for the failure details.
 
 Regards,
 Jenkins
-""",
-                to: 'pranjalnanda406@gmail.com',
-                from: 'pranjalnanda406@gmail.com',
-                replyTo: 'pranjalnanda406@gmail.com',
-                mimeType: 'text/plain'
+"""
             )
         }
 
