@@ -123,7 +123,10 @@ ${env.BUILD_URL}allure/
 Regards,
 Jenkins
 """,
-                to: 'pranjalnanda406@gmail.com'
+                to: 'pranjalnanda406@gmail.com',
+                from: 'pranjalnanda406@gmail.com',
+                replyTo: 'pranjalnanda406@gmail.com',
+                mimeType: 'text/plain'
             )
         }
 
@@ -152,7 +155,10 @@ Please check the Jenkins Console Output for the failure details.
 Regards,
 Jenkins
 """,
-                to: 'pranjalnanda406@gmail.com'
+                to: 'pranjalnanda406@gmail.com',
+                from: 'pranjalnanda406@gmail.com',
+                replyTo: 'pranjalnanda406@gmail.com',
+                mimeType: 'text/plain'
             )
         }
 
@@ -160,7 +166,7 @@ Jenkins
 
             echo 'Cleaning Jenkins workspace...'
 
-            deleteDir()//lll
+            deleteDir()
         }
     }
 }
