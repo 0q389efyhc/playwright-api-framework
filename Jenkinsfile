@@ -27,7 +27,7 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                bat 'venv\\Scripts\\pip install -r requirements.txt'
+                bat 'venv\\Scripts\\python -m pip install -r requirements.txt'
             }
         }
 
@@ -63,13 +63,14 @@ pipeline {
 
                         if (params.TEST_SUITE == 'all') {
 
-                            bat '''
+                            bat """
                             set QASE_MODE=testops
                             set QASE_TESTOPS_PROJECT=ECOM
-                            set QASE_ENVIRONMENT=%ENV%
+                            set QASE_ENVIRONMENT=${params.ENV}
+                            set BASE_URL=${env.BASE_URL}
 
                             venv\\Scripts\\python -m pytest -v --html=reports/report.html --self-contained-html --alluredir=allure-results
-                            '''
+                            """
 
                         }
                         else {
@@ -77,7 +78,8 @@ pipeline {
                             bat """
                             set QASE_MODE=testops
                             set QASE_TESTOPS_PROJECT=ECOM
-                            set QASE_ENVIRONMENT=%ENV%
+                            set QASE_ENVIRONMENT=${params.ENV}
+                            set BASE_URL=${env.BASE_URL}
 
                             venv\\Scripts\\python -m pytest -v -m ${params.TEST_SUITE} --html=reports/report.html --self-contained-html --alluredir=allure-results
                             """
@@ -106,7 +108,9 @@ pipeline {
             allure([
                 includeProperties: false,
                 jdk: '',
-                results: [[path: 'allure-results']]
+                results: [
+                    [path: 'allure-results']
+                ]
             ])
         }
 
